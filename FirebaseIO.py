@@ -1,12 +1,8 @@
 import pandas as pd
-import numpy as np
-import json
 import firebase_admin
-import requests
 from firebase_admin import credentials
 from firebase_admin import firestore
-from datetime import date, datetime
-cred = credentials.Certificate(r'X:\minglewise2019-firebase-adminsdk-5mhc2-9de8374b77.json')
+cred = credentials.Certificate('key.json')
 try:    
     firebase_admin.initialize_app(cred)
 except:
@@ -99,22 +95,6 @@ class FireBase:
         x = [doc.id for doc in unfit.stream()]
         # x = pd.DataFrame.from_dict(x)
         return x
-    # @app.route('/list', methods=['POST'])
-    # def list():
-    #     try:
-    #         gender = request.json['Gender']
-    #         all_users = db.collection('root').where(
-    #         'Gender', '!=', gender).stream()
-    #         user_list = []
-    #         #docs = db.collection(u'cities').where(u'capital', u'==', True).stream()
-    #         # all_users = [doc.to_dict() for doc in all_users.stream()]
-    #         for doc in all_users:
-    #             print(f'{doc.id} => {doc.to_dict()}')
-    #             d = doc.to_dict()
-    #             user_list.append(users(doc.id, d['Name'], d['Gender'], d['Smoking'], d['Drinking']))
-    #         return jsonpickle.encode(user_list, unpicklable=False), 200
-    #     except Exception as e:
-    #         return f"An Error Occured: {e}"
 
     def SendD(self, cluster, id):
         self.users_refx = db.collection(u'root').document(
@@ -154,3 +134,9 @@ def SendDes(x,id):
     for i in x:
         db.collection(u'DummyAIML').document(id).collection(u'MainFeed').document(i['id']).set(i)
     return 'MFList uploaded'
+
+def DyUpdate(x, id):
+    new_user = db.collection(u'DummyAIML').document(id).get()
+    for i in x:
+        db.collection(u'DummyAIML').document(id).collection(u'MainFeed').document(new_user)
+    
